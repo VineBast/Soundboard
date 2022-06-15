@@ -6,7 +6,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import persistStore from 'redux-persist/es/persistStore';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
-import Home from './src/components/Home';
+import Record from './src/components/Record';
+import Search from './src/components/Search';
+import Sampler from './src/components/Sampler';
 import store from './store';
 
 const Tab = createBottomTabNavigator();
@@ -19,9 +21,17 @@ const App = () => {
       <PersistGate persistor={persistor}>
         <NavigationContainer>
           <Tab.Navigator>
-            <Stack.Screen 
-            name='Home'
-            component={Home}
+            <Tab.Screen 
+            name='Search'
+            component={Search}
+            />
+            <Tab.Screen 
+            name='Sampler'
+            component={Sampler}
+            />
+            <Tab.Screen 
+            name='Record'
+            component={Record}
             />
           </Tab.Navigator>
         </NavigationContainer>
@@ -29,14 +39,5 @@ const App = () => {
     </Provider>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default App;

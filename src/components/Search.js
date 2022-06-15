@@ -1,16 +1,10 @@
 import { View, TouchableOpacity, StatusBar, FlatList, StyleSheet } from "react-native";
 import { SearchBar, Card, Text, Button } from 'react-native-elements';
 import { useState } from "react";
-import { test } from '../service/requestFreeSound';
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import { Recording, Sound } from 'expo-av/build/Audio';
 import { useDispatch, useSelector } from "react-redux";
 import { add, soundsSelector } from '../redux/soundsSlice';
-
-const addSound = (sound) => {
-    dispatch(add(sound))
-    console.log('add');
-}
 
 const createRequest = (search) => {
     return ('https://freesound.org/apiv2/search/text/?query=' + search + '&token=Ko0whJzjC4Mb94Xe7te8Ma5A49gwuPfM4zlzm2Ea&format=json');
@@ -20,15 +14,15 @@ const createRequestSound = (id) => {
     return ('https://freesound.org/apiv2/sounds/'+ id + '?token=Ko0whJzjC4Mb94Xe7te8Ma5A49gwuPfM4zlzm2Ea&format=json');
 }
 
-const Home = ({ navigation }) => {
+const Search = ({ navigation }) => {
     const dispatch = useDispatch();
     const sounds = useSelector(soundsSelector);
     const [search, onChangeSearch] = useState('');
     const [soundsList, setSoundsList] = useState([]);
     const [sound, setSound] = useState();
 
-    const addSound = (audioSound) => {
-        dispatch(add(audioSound));
+    const addSound = (soundFound) => {
+        dispatch(add(soundFound));
         console.log('add');
     }
 
@@ -41,8 +35,6 @@ const Home = ({ navigation }) => {
             console.log('importSound');
             console.log(sound);
             //setSound(sound);
-            console.log(sound);
-            addSound(sound);
         }
         catch (error) {
             console.log('Error', error);
@@ -65,7 +57,8 @@ const Home = ({ navigation }) => {
     const findSound = async (id) => {
         let req = await fetch(createRequestSound(id));
         let soundFound = await req.json();
-        importSound(soundFound.previews['preview-hq-mp3']);
+        addSound(soundFound);
+        //importSound(soundFound.previews['preview-hq-mp3']);
         console.log(soundFound.previews['preview-hq-mp3']);
     }
 
@@ -100,8 +93,6 @@ const Home = ({ navigation }) => {
                     </Card>
                 )}
             />
-            <Button onPress={playSound} />
-
             <StatusBar style='auto' />
         </View>
     );
@@ -109,8 +100,9 @@ const Home = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: '#011303'
     }
 });
 
-export default Home;
+export default Search;
