@@ -4,16 +4,16 @@ const librarySlice = createSlice({
     name: "library",
     initialState: [],
     reducers: {
-        add: (state, action) => {
+        addToLibrary: (state, action) => {
             let id = state.length;
             return [...state, { sound: action.payload }]
         },
-        remove: (state, action) => {
+        removeFromLibrary: (state, action) => {
             return state.filter((elm) => elm.sound.id != action.payload);
         }
     }
 });
 
-export const { add, remove } = librarySlice.actions;
+export const { addToLibrary, removeFromLibrary } = librarySlice.actions;
 export const librarySelector = (state) => state.library;
 export default librarySlice.reducer;

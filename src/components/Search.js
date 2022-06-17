@@ -1,11 +1,10 @@
-import { View, TouchableOpacity, StatusBar, FlatList, StyleSheet, Pressable } from "react-native";
+import { View, StatusBar, FlatList, StyleSheet } from "react-native";
 import { SearchBar, Card, Text, Button } from 'react-native-elements';
 import { useState } from "react";
-import { Audio, AVPlaybackStatus } from 'expo-av';
-import { Recording, Sound } from 'expo-av/build/Audio';
-import { useDispatch, useSelector } from "react-redux";
-import { add, soundsSelector } from '../redux/soundsSlice';
+import { useDispatch } from "react-redux";
+import { add } from '../redux/soundsSlice';
 import GreenButton from "./Buttons/GreenButton";
+import { addToLibrary } from "../redux/librarySlice";
 
 const createRequest = (search) => {
     return ('https://freesound.org/apiv2/search/text/?query=' + search + '&token=Ko0whJzjC4Mb94Xe7te8Ma5A49gwuPfM4zlzm2Ea&format=json');
@@ -15,15 +14,14 @@ const createRequestSound = (id) => {
     return ('https://freesound.org/apiv2/sounds/' + id + '?token=Ko0whJzjC4Mb94Xe7te8Ma5A49gwuPfM4zlzm2Ea&format=json');
 }
 
-const Search = ({ navigation }) => {
+const Search = () => {
     const dispatch = useDispatch();
-    const sounds = useSelector(soundsSelector);
     const [search, onChangeSearch] = useState('');
     const [soundsList, setSoundsList] = useState([]);
-    const [sound, setSound] = useState();
 
     const addSound = (soundFound) => {
         dispatch(add(soundFound));
+        dispatch(addToLibrary(soundFound));
         console.log('add');
     }
 
@@ -37,13 +35,12 @@ const Search = ({ navigation }) => {
         let req = await fetch(createRequestSound(id));
         let soundFound = await req.json();
         addSound(soundFound);
-        console.log(soundFound.previews['preview-hq-mp3']);
     }
 
     return (
         <View style={styles.container}>
             <SearchBar
-                placeholder='Search a song in FreeSound'
+                placeholder='Search a sound in FreeSound'
                 placeholderTextColor='white'
                 round='true'
                 value={search}

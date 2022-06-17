@@ -1,8 +1,9 @@
-import { Text, Input } from "react-native-elements";
+import { Input } from "react-native-elements";
 import { useState } from "react";
-import { View, Pressable, StyleSheet } from "react-native";
-import { add, soundsSelector } from "../redux/soundsSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { View, StyleSheet } from "react-native";
+import { add } from "../redux/soundsSlice";
+import { addToLibrary } from "../redux/librarySlice";
+import { useDispatch } from "react-redux";
 import GreenButton from "./Buttons/GreenButton";
 import uuid from 'react-native-uuid';
 import { Audio } from 'expo-av';
@@ -28,7 +29,7 @@ const Record = () => {
             }
         }
         dispatch(add(sound));
-        console.log(sound);
+        dispatch(addToLibrary(sound));
         console.log('add local sound');
     }
 
@@ -60,8 +61,6 @@ const Record = () => {
         console.log('Recording stopped and stored at', uri);
     }
 
-
-
     return (
         <View style={styles.container}>
             <Input
@@ -76,8 +75,8 @@ const Record = () => {
                 value={description}
                 onChangeText={onChangeDescription}
             />
-            <GreenButton function={startRecording} title='Start the record' />
-            <GreenButton function={stopRecording} title='Stop the record' />
+            <GreenButton function={startRecording} title='Start' />
+            <GreenButton function={stopRecording} title='Stop' />
             <GreenButton function={addLocalSound} title='Add record' />
         </View>
     )

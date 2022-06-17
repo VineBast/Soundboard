@@ -1,13 +1,23 @@
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, Pressable } from "react-native";
 
 const SoundButton = (props) => {
     return (
-        <Image
-            style={styles.tinyImage}
-            source={{
-                uri: props.image,
-            }}
-        />
+        <Pressable
+            onPress={props.function}
+            onLongPress={props.longPressFunction}
+            style={({ pressed }) => [
+                {
+                    backgroundColor: pressed
+                        ? '#DAF7A6'
+                        : '#011303'
+                }]}>
+            <Image
+                style={styles.tinyImage}
+                source={{
+                    uri: props.image,
+                }}
+            />
+        </Pressable>
     );
 }
 

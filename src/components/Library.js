@@ -1,26 +1,41 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { librarySelector } from "../redux/librarySlice";
+import { librarySelector, removeFromLibrary } from "../redux/librarySlice";
+import { add } from "../redux/soundsSlice";
+import { Card } from "react-native-elements";
+import GreenButton from "./Buttons/GreenButton";
+import TrashButton from "./Buttons/TrashButton";
 
 const Library = () => {
     const dispatch = useDispatch();
     const library = useSelector(librarySelector);
 
+    const addToSampler = (sound) => {
+        dispatch(add(sound))
+    }
+
+    const remove = (id) => {
+        dispatch(removeFromLibrary(id));
+    }
+
     return (
-        <View>
-            <FlatList 
-            style={styles.centerText}
-            data={library}
-            extraData={library}
-            keyExtractor={(item) => item.sound.id}
-            renderItem={({ item }) => (
-                <Card>
-                    <Text style={styles.cardText}>{item.name}</Text>
-                    <Text style={styles.cardText}>{item.description}</Text>
-                    <GreenButton title='add' />
-                </Card>
-            )}
-            
+        <View style={styles.container}>
+            <FlatList
+                data={library}
+                extraData={library}
+                keyExtractor={(item) => item.sound.id}
+                renderItem={({ item }) => (
+                    <Card>
+                        <Card.Title style={styles.cardText}>{item.sound.name}</Card.Title>
+                        <Card.Divider />
+                        <Card.Image source={{ uri: item.sound.images.spectral_m }} />
+                        <GreenButton function={() => addToSampler(item.sound)} title='Add to sampler' />
+                        <Card.Divider />
+                        <Text style={styles.cardText}>Description : </Text>
+                        <Text>{item.sound.description}</Text>
+                        <TrashButton function={() => remove(item.sound.id)}/>
+                    </Card>
+                )}
             />
         </View>
     )
