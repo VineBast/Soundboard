@@ -1,18 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Pressable, TouchableOpacity, Image, FlatList, Modal } from "react-native";
 import { Button, Text } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux"
-import { add, soundsSelector } from "../redux/soundsSlice";
+import { add, remove, soundsSelector } from "../redux/soundsSlice";
 import SoundButton from "./Buttons/SoundButton";
 import { Audio, AVPlaybackStatus } from 'expo-av';
-import { Recording, Sound } from 'expo-av/build/Audio';
-import { createPermissionHook } from "expo-modules-core";
+import GreenButton from "./Buttons/GreenButton";
 
 const Sampler = () => {
     const dispatch = useDispatch();
     const sounds = useSelector(soundsSelector);
     const [modalVisible, setModalVisible] = useState(false);
-    
+
+    const test = () => {
+        console.log(sounds);
+    }
+
+    const removeSound = (id) => {
+        dispatch(remove(id));
+        console.log('remove');
+    }
+
     const playSound = async (uri) => {
         try {
             const { sound } = await Audio.Sound.createAsync({
@@ -27,6 +35,7 @@ const Sampler = () => {
 
     return (
         <View style={styles.container}>
+            <GreenButton function={test} title='test' />
             <FlatList
                 style={styles.flex}
                 numColumns={3}
@@ -36,7 +45,7 @@ const Sampler = () => {
                 renderItem={({ item }) => (
                     <Pressable
                         onPress={() => playSound(item.sound.previews['preview-hq-mp3'])}
-                        onLongPress={() => setModalVisible(true)}
+                        onLongPress={() => removeSound(item.sound.id)}
                         style={({ pressed }) => [
                             {
                                 backgroundColor: pressed
@@ -47,8 +56,7 @@ const Sampler = () => {
                             image={item.sound.images.spectral_m}
                         />
                     </Pressable>
-                )
-                }
+                )}
             />
             <Modal
                 animationType="fade"
@@ -61,7 +69,9 @@ const Sampler = () => {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Hello World!</Text>
+                        <Text style={styles.modalText}></Text>
+                        <Text style={styles.modalText}>Test</Text>
+                        <GreenButton function={() => setModalVisible(!modalVisible)} title='Close' />
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setModalVisible(!modalVisible)}

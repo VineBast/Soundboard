@@ -11,9 +11,9 @@ import Record from './src/components/Record';
 import Search from './src/components/Search';
 import Sampler from './src/components/Sampler';
 import store from './store';
+import Library from './src/components/Library';
 
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
 const persistor = persistStore(store);
 
 const App = () => {
@@ -31,7 +31,8 @@ const App = () => {
                 const icons = {
                   Search: 'search-outline',
                   Sampler: 'play-circle-outline',
-                  Record: 'recording-outline'
+                  Record: 'recording-outline',
+                  Library: 'library-outline'
                 };
                 return (
                   <Ionicons
@@ -46,17 +47,18 @@ const App = () => {
             <Tab.Screen
               name='Search'
               component={Search}
-
             />
             <Tab.Screen
               name='Sampler'
               component={Sampler}
-
             />
             <Tab.Screen
               name='Record'
               component={Record}
-
+            />
+            <Tab.Screen
+              name='Library'
+              component={Library}
             />
           </Tab.Navigator>
         </NavigationContainer>

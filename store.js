@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import soundsReducer from './src/redux/soundsSlice';
-import localSoundsReducer from './src/redux/soundsSlice';
+import libraryReducer from './src/redux/librarySlice';
 
 import {
     persistReducer,
@@ -14,7 +14,7 @@ import {
     REGISTER,
 } from 'redux-persist';
 
-const reducers = combineReducers({ sounds: soundsReducer, localSounds: localSoundsReducer });
+const reducers = combineReducers({ sounds: soundsReducer, library: libraryReducer });
 
 const persistConfig = {
     key: "root",

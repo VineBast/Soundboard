@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const soundsSlice = createSlice({
-    name: "sounds",
+const librarySlice = createSlice({
+    name: "library",
     initialState: [],
     reducers: {
         add: (state, action) => {
@@ -14,6 +14,6 @@ const soundsSlice = createSlice({
     }
 });
 
-export const { add, remove } = soundsSlice.actions;
-export const soundsSelector = (state) => state.sounds;
-export default soundsSlice.reducer;
+export const { add, remove } = librarySlice.actions;
+export const librarySelector = (state) => state.library;
+export default librarySlice.reducer;

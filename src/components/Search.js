@@ -1,17 +1,18 @@
-import { View, TouchableOpacity, StatusBar, FlatList, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StatusBar, FlatList, StyleSheet, Pressable } from "react-native";
 import { SearchBar, Card, Text, Button } from 'react-native-elements';
 import { useState } from "react";
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import { Recording, Sound } from 'expo-av/build/Audio';
 import { useDispatch, useSelector } from "react-redux";
 import { add, soundsSelector } from '../redux/soundsSlice';
+import GreenButton from "./Buttons/GreenButton";
 
 const createRequest = (search) => {
     return ('https://freesound.org/apiv2/search/text/?query=' + search + '&token=Ko0whJzjC4Mb94Xe7te8Ma5A49gwuPfM4zlzm2Ea&format=json');
 }
 
 const createRequestSound = (id) => {
-    return ('https://freesound.org/apiv2/sounds/'+ id + '?token=Ko0whJzjC4Mb94Xe7te8Ma5A49gwuPfM4zlzm2Ea&format=json');
+    return ('https://freesound.org/apiv2/sounds/' + id + '?token=Ko0whJzjC4Mb94Xe7te8Ma5A49gwuPfM4zlzm2Ea&format=json');
 }
 
 const Search = ({ navigation }) => {
@@ -26,28 +27,6 @@ const Search = ({ navigation }) => {
         console.log('add');
     }
 
-    const importSound = async (uri) => {
-        console.log(uri);
-        try {
-            const { sound } = await Audio.Sound.createAsync({
-                uri: uri
-            });
-            console.log('importSound');
-            console.log(sound);
-            //setSound(sound);
-        }
-        catch (error) {
-            console.log('Error', error);
-        }
-    }
-
-    const playSound = async () => {
-        console.log(sounds);
-        //await sounds[1].sound.playAsync();
-        // IL FAUT METTRE LE LIEN CDN DANS LE REDUX !!!!
-        await sound.playAsync();
-    }
-
     const findRequest = async () => {
         let req = await fetch(createRequest(search));
         let sounds = await req.json();
@@ -58,38 +37,30 @@ const Search = ({ navigation }) => {
         let req = await fetch(createRequestSound(id));
         let soundFound = await req.json();
         addSound(soundFound);
-        //importSound(soundFound.previews['preview-hq-mp3']);
         console.log(soundFound.previews['preview-hq-mp3']);
-    }
-
-    const test = (item) => {
-        console.log(item);
     }
 
     return (
         <View style={styles.container}>
             <SearchBar
                 placeholder='Search a song in FreeSound'
+                placeholderTextColor='white'
                 round='true'
                 value={search}
                 onChangeText={onChangeSearch}
-                containerStyle={{ backgroundColor: 'white', width: '100%' }}
-                inputContainerStyle={{ backgroundColor: 'white' }}
-                lightTheme='true' />
-            <Button onPress={findRequest}
-                title='search'
-                containerStyle={{
-                    marginHorizontal: 50,
-                    marginVertical: 10,
-                }} />
+                containerStyle={{ backgroundColor: '#011303', width: '100%' }}
+                inputContainerStyle={{ backgroundColor: '#B5BDA5' }}
+            />
+            <GreenButton function={findRequest} title='search' />
             <FlatList
+                style={styles.centerText}
                 data={soundsList.results}
                 extraData={soundsList.results}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <Card>
-                        <Text>{item.name}</Text>
-                        <Button title='add' onPress={() => findSound(item.id)} />
+                        <Text style={styles.cardText}>{item.name}</Text>
+                        <GreenButton title='add' function={() => findSound(item.id)} />
                     </Card>
                 )}
             />
@@ -102,6 +73,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#011303'
+    },
+    centerText: {
+        textAlign: 'center'
+    },
+    cardText: {
+        fontSize: 20,
+        color: '#8B9D6C'
     }
 });
 

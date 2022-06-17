@@ -1,9 +1,36 @@
 import { Text, Input } from "react-native-elements";
 import { useState } from "react";
 import { View, Pressable, StyleSheet } from "react-native";
+import { add, soundsSelector } from "../redux/soundsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import GreenButton from "./Buttons/GreenButton";
+import uuid from 'react-native-uuid';
+import { Audio } from 'expo-av';
 
 const Record = () => {
+    const dispatch = useDispatch();
     const [recording, setRecording] = useState();
+    const [soundUri, setSoundUri] = useState('');
+    const [title, onChangeTitle] = useState('')
+    const [description, onChangeDescription] = useState('');
+
+    const addLocalSound = () => {
+        let id = uuid.v4();
+        const sound = {
+            id: id,
+            name: title,
+            description: description,
+            images: {
+                spectral_m: 'https://i.stack.imgur.com/PvPpN.png'
+            },
+            previews: {
+                'preview-hq-mp3': soundUri
+            }
+        }
+        dispatch(add(sound));
+        console.log(sound);
+        console.log('add local sound');
+    }
 
     async function startRecording() {
         try {
@@ -14,11 +41,10 @@ const Record = () => {
                 playsInSilentModeIOS: true,
             });
             console.log('Starting recording..');
-            const recording = new Audio.Recording();
-            await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
-            await recording.startAsync();
+            const { recording } = await Audio.Recording.createAsync(
+                Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+            );
             setRecording(recording);
-            console.log(recording);
             console.log('Recording started');
         } catch (err) {
             console.error('Failed to start recording', err);
@@ -30,35 +56,29 @@ const Record = () => {
         setRecording(undefined);
         await recording.stopAndUnloadAsync();
         const uri = recording.getURI();
+        setSoundUri(uri);
         console.log('Recording stopped and stored at', uri);
     }
+
+
 
     return (
         <View style={styles.container}>
             <Input
                 placeholder='Enter a title for your recording sound'
+                value={title}
+                onChangeText={onChangeTitle}
                 leftIcon={{ type: 'font-awesome', name: 'chevron-left' }}
             />
             <Input
                 placeholder="Enter a description"
                 leftIcon={{ type: 'font-awesome', name: 'comment' }}
-                onChangeText={value => this.setState({ comment: value })}
+                value={description}
+                onChangeText={onChangeDescription}
             />
-            <Pressable
-                onPress={startRecording}
-                style={[styles.button, styles.buttonClose]}>
-                <Text>Start</Text>
-            </Pressable>
-            <Pressable
-                onPress={stopRecording}
-                style={[styles.button, styles.buttonClose]}>
-                <Text>Stop</Text>
-            </Pressable>
-            <Pressable
-                onPress={stopRecording}
-                style={[styles.button, styles.buttonClose]}>
-                <Text>Add sound</Text>
-            </Pressable>
+            <GreenButton function={startRecording} title='Start the record' />
+            <GreenButton function={stopRecording} title='Stop the record' />
+            <GreenButton function={addLocalSound} title='Add record' />
         </View>
     )
 }
