@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import GreenButton from "./Buttons/GreenButton";
 import uuid from 'react-native-uuid';
 import { Audio } from 'expo-av';
+import { transformSoundObject } from "../service/transformSoundObject";
 
 const Record = () => {
     const dispatch = useDispatch();
@@ -17,17 +18,7 @@ const Record = () => {
 
     const addLocalSound = () => {
         let id = uuid.v4();
-        const sound = {
-            id: id,
-            name: title,
-            description: description,
-            images: {
-                spectral_m: 'https://i.stack.imgur.com/PvPpN.png'
-            },
-            previews: {
-                'preview-hq-mp3': soundUri
-            }
-        }
+        const sound = transformSoundObject(id, title, description, 'https://i.stack.imgur.com/PvPpN.png', soundUri, 'record');
         dispatch(add(sound));
         dispatch(addToLibrary(sound));
         console.log('add local sound');

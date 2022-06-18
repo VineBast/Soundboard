@@ -1,14 +1,15 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { librarySelector, removeFromLibrary } from "../redux/librarySlice";
+import { filteredSoundsSelector, removeFromLibrary } from "../redux/librarySlice";
 import { add } from "../redux/soundsSlice";
 import { Card } from "react-native-elements";
 import GreenButton from "./Buttons/GreenButton";
 import TrashButton from "./Buttons/TrashButton";
+import { ButtonFilter } from "./Buttons/ButtonFilter";
 
 const Library = () => {
     const dispatch = useDispatch();
-    const library = useSelector(librarySelector);
+    const library = useSelector(filteredSoundsSelector);
 
     const addToSampler = (sound) => {
         dispatch(add(sound))
@@ -20,6 +21,20 @@ const Library = () => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.row}>
+                <ButtonFilter
+                    title={"Freesounds"}
+                    dispatch={"freesound"}
+                />
+                <ButtonFilter
+                    title={"Records"}
+                    dispatch={"record"}
+                />
+                <ButtonFilter
+                    title={"All"}
+                    dispatch={"all"}
+                />
+            </View>
             <FlatList
                 data={library}
                 extraData={library}
@@ -33,7 +48,7 @@ const Library = () => {
                         <Card.Divider />
                         <Text style={styles.cardText}>Description : </Text>
                         <Text>{item.sound.description}</Text>
-                        <TrashButton function={() => remove(item.sound.id)}/>
+                        <TrashButton function={() => remove(item.sound.id)} />
                     </Card>
                 )}
             />
@@ -45,6 +60,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#011303'
+    },
+    row: {
+        justifyContent: "center",
+        flexDirection: "row",
+        flexWrap: "wrap",
     },
     centerText: {
         textAlign: 'center'

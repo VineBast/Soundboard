@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { add } from '../redux/soundsSlice';
 import GreenButton from "./Buttons/GreenButton";
 import { addToLibrary } from "../redux/librarySlice";
+import { transformSoundObject } from '../service/transformSoundObject';
 
 const createRequest = (search) => {
     return ('https://freesound.org/apiv2/search/text/?query=' + search + '&token=Ko0whJzjC4Mb94Xe7te8Ma5A49gwuPfM4zlzm2Ea&format=json');
@@ -20,8 +21,9 @@ const Search = () => {
     const [soundsList, setSoundsList] = useState([]);
 
     const addSound = (soundFound) => {
-        dispatch(add(soundFound));
-        dispatch(addToLibrary(soundFound));
+        const sound = transformSoundObject(soundFound.id, soundFound.name, soundFound.description, soundFound.images.spectral_m, soundFound.previews['preview-hq-mp3'], 'freesound');
+        dispatch(add(sound));
+        dispatch(addToLibrary(sound));
         console.log('add');
     }
 

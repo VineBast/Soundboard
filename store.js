@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import soundsReducer from './src/redux/soundsSlice';
 import libraryReducer from './src/redux/librarySlice';
+import filterReducer from "./src/redux/filterSlice";
 
 import {
     persistReducer,
@@ -14,7 +15,7 @@ import {
     REGISTER,
 } from 'redux-persist';
 
-const reducers = combineReducers({ sounds: soundsReducer, library: libraryReducer });
+const reducers = combineReducers({ sounds: soundsReducer, library: libraryReducer, filter: filterReducer });
 
 const persistConfig = {
     key: "root",

@@ -14,6 +14,19 @@ const librarySlice = createSlice({
     }
 });
 
+export const filteredSoundsSelector = (state) => {
+    switch (state.filter) {
+        case 'all':
+            return state.library;
+        case 'record':
+            return state.library.filter((elm) => elm.sound.type === "record");
+        case 'freesound':
+            return state.library.filter((elm) => elm.sound.type === "freesound");
+        default:
+            break;
+    }
+}
+
 export const { addToLibrary, removeFromLibrary } = librarySlice.actions;
 export const librarySelector = (state) => state.library;
 export default librarySlice.reducer;
