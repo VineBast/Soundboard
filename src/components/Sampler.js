@@ -8,11 +8,13 @@ const Sampler = () => {
     const dispatch = useDispatch();
     const sounds = useSelector(soundsSelector);
 
+    //Remove form sounds (from redux) a sound 
     const removeSound = (id) => {
         dispatch(remove(id));
         console.log('remove');
     }
 
+    //use expo av to play a sound
     const playSound = async (uri) => {
         try {
             const { sound } = await Audio.Sound.createAsync({

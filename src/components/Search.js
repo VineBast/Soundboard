@@ -20,6 +20,7 @@ const Search = () => {
     const [search, onChangeSearch] = useState('');
     const [soundsList, setSoundsList] = useState([]);
 
+    //Add a type the object sound and add it to redux (for sounds and library)
     const addSound = (soundFound) => {
         const sound = transformSoundObject(soundFound.id, soundFound.name, soundFound.description, soundFound.images.spectral_m, soundFound.previews['preview-hq-mp3'], 'freesound');
         dispatch(add(sound));
@@ -27,12 +28,15 @@ const Search = () => {
         console.log('add');
     }
 
+    //async functions, call the Freesound api and transform response in json :
+    //1st one, find all sounds with a key word
     const findRequest = async () => {
         let req = await fetch(createRequest(search));
         let sounds = await req.json();
         setSoundsList(sounds);
     }
 
+    //2nd one find the sound selected by id
     const findSound = async (id) => {
         let req = await fetch(createRequestSound(id));
         let soundFound = await req.json();

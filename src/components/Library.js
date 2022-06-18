@@ -11,6 +11,7 @@ const Library = () => {
     const dispatch = useDispatch();
     const library = useSelector(filteredSoundsSelector);
 
+    //Add and remove from library (redux)
     const addToSampler = (sound) => {
         dispatch(add(sound))
     }

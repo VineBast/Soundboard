@@ -1,3 +1,4 @@
+//Transform the object sound for library and sounds from redux, to a simple object with a type (the type is using for filter)
 export const transformSoundObject = (id, name, description, image, preview, type) => {
     const sound = {
         id: id,

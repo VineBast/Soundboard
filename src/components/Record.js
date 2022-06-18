@@ -24,6 +24,7 @@ const Record = () => {
         console.log('add local sound');
     }
 
+    //async functions from the expo-av doc : request a persmission to audio setup, and record a sound and put it in a useState
     async function startRecording() {
         try {
             console.log('Requesting permissions..');
@@ -43,6 +44,7 @@ const Record = () => {
         }
     }
 
+    //set uri in a useState when the record stop
     async function stopRecording() {
         console.log('Stopping recording..');
         setRecording(undefined);

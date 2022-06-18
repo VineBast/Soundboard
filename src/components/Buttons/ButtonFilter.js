@@ -5,6 +5,7 @@ import { setFilter } from "../../redux/filterSlice";
 export const ButtonFilter = (props) => {
     const dispatch = useDispatch();
 
+    //A button for filter, take the prop all or freesound or record and put it in the state filter (redux)
     return (
         <Button title={props.title}
             onPress={() => {

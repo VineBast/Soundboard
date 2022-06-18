@@ -14,6 +14,7 @@ const librarySlice = createSlice({
     }
 });
 
+//filter the library (and return it) depending of the state.filter
 export const filteredSoundsSelector = (state) => {
     switch (state.filter) {
         case 'all':
